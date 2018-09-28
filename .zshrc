@@ -16,7 +16,7 @@ bindkey -v
 # End of lines configured by zsh-newuser-install
 
 # Show git current branch
-source /Users/petereast/clones/zsh-git-prompt/zshrc.sh
+source ~/clones/zsh-git-prompt/zshrc.sh
 
 # Begin custom config
 # PROMPT="%3c$(git_super_status)$ "
@@ -54,6 +54,8 @@ alias dps='docker ps'
 alias gst='git status'
 alias glg='git log'
 alias gb='git branch'
+alias scronch='rm -rf'
+eval $(thefuck --alias)
 
 # The golden alias
 alias precompile='npm run lint && npm run compile && npm run test'
@@ -63,3 +65,12 @@ alias premake='npm run lint && npm run compile && npm run test'
 export NVM_DIR="$HOME/.nvm"
   . "/usr/local/opt/nvm/nvm.sh"
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+eval "$(stack --bash-completion-script stack)"
+export GPG_TTY=$(tty)
+export PATH=~/bin:/home/peter/.cargo/bin:/home/peter/.nvm/versions/node/v10.9.0/bin:/usr/share/Modules/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/peter/.local/bin:/home/peter/bin:/home/peter/bin:/usr/local/bin:/home/peter/.cargo/bin
