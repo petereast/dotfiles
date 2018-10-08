@@ -16,6 +16,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'eagletmt/neco-ghc'
 Plug 'https://github.com/majutsushi/tagbar'
 Plug 'racer-rust/vim-racer'
+Plug 'mustache/vim-mustache-handlebars'
 
 call plug#end()
 filetype plugin indent on
@@ -62,3 +63,14 @@ set clipboard^=unnamed
 set hidden
 let g:racer_cmd = "/home/user/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
+
+command PrettyJson %!python -m json.tool
+
+" Rust Racer
+let g:racer_cmd = "/home/peter/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
+let g:rust_recommended_style = 1
+let g:rustfmt_autosave = 1
+let g:rustfmt_command = "cargo +nightly fmt --"
+
+imap <c-space> <c-x><c-o>
