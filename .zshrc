@@ -1,6 +1,7 @@
 # The following lines were added by compinstall
 
-zstyle ':completion:*' completer _complete _ignored
+zstyle ':completion:*' max-errors 2
+zstyle ':completion:*' completer _complete _approximate _history _ignored 
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
 zstyle :compinstall filename '/Users/petereast/.zshrc'
 
@@ -18,9 +19,13 @@ bindkey -v
 # Show git current branch
 source ~/clones/zsh-git-prompt/zshrc.sh
 
+# Make sure everything uses neovim
+EDITOR=nvim
+
 # Begin custom config
 # PROMPT="%3c$(git_super_status)$ "
-PROMPT='%B%m%~%b$(git_super_status) %# '
+PROMPT='%B%m%~%b$(git_super_status)
+|>'
 RPS1="%_ :%?"
 
 # Add brew-installed programs to PATH
@@ -50,16 +55,22 @@ PATH=$PATH:~/.cargo/bin
 alias :q='exit'
 alias ll='ls -l'
 alias la='ls -a'
-alias dps='docker ps'
-alias gst='git status'
-alias glg='git log'
+alias dps='docker ps --format "{{.ID}}\t{{.Names}}\t{{.Status}}"'
+alias dlg='docker logs -f'
+alias dtop='docker stats'
+alias gst='git status --short'
+alias glg='git log --graph --oneline --decorate --all'
 alias gb='git branch'
+alias gc='git commit -S'
 alias scronch='rm -rf'
 eval $(thefuck --alias)
 
+alias start_elastic='docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.4.3'
+
 # The golden alias
 alias precompile='npm run lint && npm run compile && npm run test'
-alias premake='npm run lint && npm run compile && npm run test'
+alias prescronch='sudo chown -R peter . && npm run lint && npm run compile && npm run test'
+alias premake='npm run lint && npm run make && npm run test'
 
 # Add nvm utilities
 export NVM_DIR="$HOME/.nvm"
@@ -69,8 +80,33 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# use the right version of node
+nvm use 10
+
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 eval "$(stack --bash-completion-script stack)"
 export GPG_TTY=$(tty)
 export PATH=~/bin:/home/peter/.cargo/bin:/home/peter/.nvm/versions/node/v10.9.0/bin:/usr/share/Modules/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/peter/.local/bin:/home/peter/bin:/home/peter/bin:/usr/local/bin:/home/peter/.cargo/bin
+
+# Add some i3lock stuff
+alias lock='i3lock -c000000 -i /home/peter/Pictures/t3_77zygv.png'
+alias syssleep='lock && systemctl suspend'
+
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Add stuff that should be in the path anyway
+PATH=$PATH:/bin
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/peter/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/peter/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/peter/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/peter/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Add installed node modules to the path
+PATH=$PATH:~/.nvm/versions/node/v10.15.1/bin/
+
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
+fi

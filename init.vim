@@ -7,6 +7,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'rust-lang/rust.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'diepm/vim-rest-console'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'terryma/vim-multiple-cursors'
 Plug 'eagletmt/ghcmod-vim'
 Plug 'vim-airline/vim-airline'
@@ -15,10 +16,17 @@ Plug 'Xuyuanp/nerdtree-git-plugin' " Show git status in nerd-tre
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'eagletmt/neco-ghc'
 Plug 'https://github.com/majutsushi/tagbar'
+Plug 'tpope/vim-fugitive'
 Plug 'racer-rust/vim-racer'
 Plug 'mustache/vim-mustache-handlebars'
+Plug 'Quramy/vim-js-pretty-template'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'alx741/vim-hindent'
+Plug 'chrisbra/csv.vim'
+Plug 'mxw/vim-jsx'
 
 call plug#end()
+
 filetype plugin indent on
 " show existing tab with 4 spaces width
 set tabstop=2
@@ -61,10 +69,8 @@ let g:ctrlp_cmp = 'CtrlP'
 
 set clipboard^=unnamed
 set hidden
-let g:racer_cmd = "/home/user/.cargo/bin/racer"
-let g:racer_experimental_completer = 1
 
-command PrettyJson %!python -m json.tool
+command! PrettyJson %!python -m json.tool
 
 " Rust Racer
 let g:racer_cmd = "/home/peter/.cargo/bin/racer"
@@ -74,3 +80,53 @@ let g:rustfmt_autosave = 1
 let g:rustfmt_command = "cargo +nightly fmt --"
 
 imap <c-space> <c-x><c-o>
+
+" Stuff for written documents
+hi clear SpellBad
+hi SpellBad cterm=underline
+
+" ----- neovimhaskell/haskell-vim -----
+
+" Align 'then' two spaces after 'if'
+let g:haskell_indent_if = 2
+" Indent 'where' block two spaces under previous body
+let g:haskell_indent_before_where = 2
+" Allow a second case indent style (see haskell-vim README)
+let g:haskell_indent_case_alternative = 1
+" Only next under 'let' if there's an equals sign
+let g:haskell_indent_let_no_in = 0
+
+" ----- hindent & stylish-haskell -----
+
+" Indenting on save is too aggressive for me
+let g:hindent_on_save = 1
+
+" Helper function, called below with mappings
+function! HaskellFormat(which) abort
+  if a:which ==# 'hindent' || a:which ==# 'both'
+    :Hindent
+  endif
+  if a:which ==# 'stylish' || a:which ==# 'both'
+    silent! exe 'undojoin'
+    silent! exe 'keepjumps %!stylish-haskell'
+  endif
+endfunction
+
+" Key bindings
+augroup haskellStylish
+  au!
+  " Just hindent
+  au FileType haskell nnoremap <leader>hi :Hindent<CR>
+  " Just stylish-haskell
+  au FileType haskell nnoremap <leader>hs :call HaskellFormat('stylish')<CR>
+  " First hindent, then stylish-haskell
+  au FileType haskell nnoremap <leader>hf :call HaskellFormat('both')<CR>
+augroup END
+
+" let g:ale_linters.haskell = ['hlint']
+
+nnoremap <c-/> :NERDTreeToggle<CR>
+nnoremap <c-t> :tabe<cr>:NERDTreeMirror<CR>
+
+set timeoutlen=100 ttimeoutlen=0
+let g:ctrlp_custom_ignore = '\node_modules\'
