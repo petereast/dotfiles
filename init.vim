@@ -1,6 +1,9 @@
 
 call plug#begin('~/.vim/plugged')
 
+
+Plug 'purescript-contrib/purescript-vim'
+Plug 'ElmCast/elm-vim'
 Plug 'w0rp/ale'
 Plug 'Quramy/tsuquyomi'
 Plug 'leafgarland/typescript-vim'
@@ -24,6 +27,7 @@ Plug 'neovimhaskell/haskell-vim'
 Plug 'alx741/vim-hindent'
 Plug 'chrisbra/csv.vim'
 Plug 'mxw/vim-jsx'
+Plug 'elixir-editors/vim-elixir'
 
 call plug#end()
 
@@ -60,9 +64,12 @@ let g:ale_rust_cargo_check_tests = 1
 " Stuff for ctrlspace
 set nocompatible
 set hidden
-if executable("ag")
-  let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+if executable("rg")
+  let g:CtrlSpaceGlobCommand = 'rg -l --nocolor -g ""'
 endif
+
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
 
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmp = 'CtrlP'
