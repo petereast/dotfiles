@@ -110,3 +110,14 @@ PATH=$PATH:~/.nvm/versions/node/v10.15.1/bin/
 if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# Zeit stuff
+alias zremote="TERM=screen ssh -t root@167.99.82.200 -L 3000:localhost:3000 -L 8080:localhost:8080 tmux attach"
+alias zlog="git log --reverse --format=%B --max-count=20 | sed '/^$/d' | sed 's/^/* /'"
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+
+eval "$(rbenv init -)"
+alias prdone='git checkout master && git pull --prune'
