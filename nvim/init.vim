@@ -1,22 +1,22 @@
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'martinda/Jenkinsfile-vim-syntax'
-Plug 'jparise/vim-graphql'
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'vim-scripts/indentpython.vim'
-Plug 'nvie/vim-flake8'
+
+Plug 'purescript-contrib/purescript-vim'
+Plug 'ElmCast/elm-vim'
 Plug 'w0rp/ale'
 Plug 'Quramy/tsuquyomi'
 Plug 'leafgarland/typescript-vim'
 Plug 'rust-lang/rust.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'diepm/vim-rest-console'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'terryma/vim-multiple-cursors'
 Plug 'eagletmt/ghcmod-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin' " Show git status in nerd-tre
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'eagletmt/neco-ghc'
 Plug 'https://github.com/majutsushi/tagbar'
 Plug 'tpope/vim-fugitive'
@@ -25,24 +25,13 @@ Plug 'mustache/vim-mustache-handlebars'
 Plug 'Quramy/vim-js-pretty-template'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'alx741/vim-hindent'
-Plug 'pangloss/vim-javascript'
 Plug 'chrisbra/csv.vim'
 Plug 'mxw/vim-jsx'
-Plug 'kchmck/vim-coffee-script'
-
-" Elixir
 Plug 'elixir-editors/vim-elixir'
 
-" Elm
-Plug 'ElmCast/elm-vim'
-
-" Maybe remove this later
-Plug 'severin-lemaignan/vim-minimap'
-
-" Nginx
-Plug 'chr4/nginx.vim'
-
 call plug#end()
+
+set background=light
 
 filetype plugin indent on
 " show existing tab with 4 spaces width
@@ -52,9 +41,19 @@ set shiftwidth=2
 " On pressing tab, insert 4 spaces
 set expandtab
 
+" Rust crap
+let g:racer_cmd = "/home/peter/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
+let g:racer_insert_paren = 1
+
+
+" Context.vim
+let g:context_enabled = 1
+let g:context_add_autocmds = 1
+let g:context_presenter = "nvim-float"
+
 " Some settings
 syntax on
-let python_highlight_all=1
 set number
 set ruler
 set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
@@ -62,7 +61,6 @@ set list
 
 " NERDTree stuff
 autocmd StdinReadPre * let s:std_in=1
-highlight Directory guifg=#FF0000 ctermfg=red
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Change the background colour of ALE highlighting
@@ -73,33 +71,29 @@ highlight ALEWarning ctermbg=black
 " TODO
 
 " Run rustfmt on write of rust files
-autocmd BufWritePost *.rs !cargo +nightly fmt
-let g:ale_rust_cargo_check_tests = 1
+" autocmd BufWritePost *.rs !cargo +nightly fmt
+" let g:ale_rust_cargo_check_tests = 1
 
 " Stuff for ctrlspace
 set nocompatible
 set hidden
-if executable("ag")
-  let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+if executable("rg")
+  let g:CtrlSpaceGlobCommand = 'rg -l --nocolor -g ""'
 endif
 
-set wildignore +=*/node_modules/*
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
 
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_custom_ignore = '\node_modules\'
-let g:ctrlp_cmp = 'CtrlPMixed'
+let g:ctrlp_cmp = 'CtrlP'
 
 set clipboard^=unnamed
 set hidden
 
 command! PrettyJson %!python -m json.tool
 
-" Rust Racer
-let g:racer_cmd = "/home/peter/.cargo/bin/racer"
-let g:racer_experimental_completer = 1
 let g:rust_recommended_style = 1
 let g:rustfmt_autosave = 1
-let g:rustfmt_command = "cargo +nightly fmt --"
 
 imap <c-space> <c-x><c-o>
 
@@ -151,30 +145,7 @@ nnoremap <c-/> :NERDTreeToggle<CR>
 nnoremap <c-t> :tabe<cr>:NERDTreeMirror<CR>
 
 set timeoutlen=100 ttimeoutlen=0
+let g:ctrlp_custom_ignore = '\node_modules\'
 
-" Let's add some javascript rubbish
-let g:javascript_conceal_function             = "ƒ"
-let g:javascript_conceal_null                 = "ø"
-let g:javascript_conceal_this                 = "@"
-let g:javascript_conceal_return               = "⇚"
-let g:javascript_conceal_undefined            = "¿"
-let g:javascript_conceal_NaN                  = "ℕ"
-let g:javascript_conceal_prototype            = "¶"
-let g:javascript_conceal_static               = "•"
-let g:javascript_conceal_super                = "Ω"
-" let g:javascript_conceal_arrow_function       = "⇒"
-let g:javascript_conceal_noarg_arrow_function = "_"
-let g:javascript_conceal_underscore_arrow_function = "🞅"
-
-map <leader>l :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
-
-" Python stuff
-au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
-    \ set fileformat=unix
-
+" Set the colour of the pmenu
+hi Pmenu ctermbg=white

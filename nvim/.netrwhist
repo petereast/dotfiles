@@ -1,5 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/home/petereast/git/elife/elife-xpub/test'
-let g:netrw_dirhist_2='/home/petereast/git/elife/gql-codegen/custom_generated'
-let g:netrw_dirhist_3='/home/petereast/git/elife/elife-xpub'
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/home/peter/git/personal/learn-conduit/learn-conduit/src'
+let g:netrw_dirhist_2='/home/peter/git/personal/elixir-playground'
+let g:netrw_dirhist_3='/home/peter/git/university/ce301_east_p/osm-preporcessor/src'
+let g:netrw_dirhist_4='/home/peter/git/university/ce301_east_p/osm-preporcessor'
+let g:netrw_dirhist_5='/home/peter/git/personal/todosleuth-clj/backend-v1'
+let g:netrw_dirhist_6='/home/peter/git/personal/todosleuth-clj/backend-v1/src/backend_v1'
