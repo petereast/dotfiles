@@ -1,4 +1,3 @@
-
 call plug#begin('~/.vim/plugged')
 
 
@@ -19,6 +18,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin' " Show git status in nerd-tre
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'eagletmt/neco-ghc'
 Plug 'https://github.com/majutsushi/tagbar'
+Plug 'jreybert/vimagit'
 Plug 'tpope/vim-fugitive'
 Plug 'racer-rust/vim-racer'
 Plug 'mustache/vim-mustache-handlebars'
@@ -29,8 +29,23 @@ Plug 'chrisbra/csv.vim'
 Plug 'mxw/vim-jsx'
 Plug 'elixir-editors/vim-elixir'
 
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+Plug 'clojure-vim/async-clj-omni'
+Plug 'pbogut/deoplete-elm'
+Plug 'Shougo/neco-syntax'
+Plug 'vim-scripts/dbext.vim'
+
 call plug#end()
 
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('keyword_patterns', {'clojure': '[\w!$%&*+/:<=>?@\^_~\-\.#]*'})
 set background=light
 
 filetype plugin indent on
@@ -149,3 +164,6 @@ let g:ctrlp_custom_ignore = '\node_modules\'
 
 " Set the colour of the pmenu
 hi Pmenu ctermbg=white
+
+" Clojure stuff
+let g:ale_linters = {'clojure': ['clj-kondo']}
