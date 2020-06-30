@@ -28,25 +28,16 @@ Plug 'alx741/vim-hindent'
 Plug 'chrisbra/csv.vim'
 Plug 'mxw/vim-jsx'
 Plug 'elixir-editors/vim-elixir'
-
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-
-Plug 'clojure-vim/async-clj-omni'
-Plug 'pbogut/deoplete-elm'
-Plug 'Shougo/neco-syntax'
 Plug 'vim-scripts/dbext.vim'
+
+" Use release branch (recommend)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 call plug#end()
 
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('keyword_patterns', {'clojure': '[\w!$%&*+/:<=>?@\^_~\-\.#]*'})
-set background=light
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 filetype plugin indent on
 " show existing tab with 4 spaces width
