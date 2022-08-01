@@ -1,13 +1,3 @@
-# The following lines were added by compinstall
-
-zstyle ':completion:*' max-errors 2
-zstyle ':completion:*' completer _complete _approximate _history _ignored 
-zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
-zstyle :compinstall filename '/Users/petereast/.zshrc'
-
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
@@ -15,10 +5,12 @@ SAVEHIST=1000
 unsetopt beep
 bindkey -v
 # End of lines configured by zsh-newuser-install
+alias python=python3
 
 # Show git current branch
 source ~/clones/zsh-git-prompt/zshrc.sh
 
+typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE='20'
 # Make sure everything uses neovim
 EDITOR=nvim
 
@@ -52,6 +44,7 @@ PATH=$PATH:~/.cargo/bin
 
 # Add a few custom aliases
 
+alias aw='aws --endpoint-url http://localhost:4566 --region us-east-1'
 alias :q='exit'
 alias ll='ls -l'
 alias la='ls -a'
@@ -62,6 +55,7 @@ alias gst='git status --short'
 alias glg='git log --graph --oneline --decorate --all'
 alias gb='git branch'
 alias gc='git commit -S'
+alias b='git checkout -b'
 alias scronch='rm -rf'
 eval $(thefuck --alias)
 
@@ -72,28 +66,24 @@ alias precompile='npm run lint && npm run compile && npm run test'
 alias prescronch='sudo chown -R peter . && npm run lint && npm run compile && npm run test'
 alias premake='npm run lint && npm run make && npm run test'
 
-# Add nvm utilities
-export NVM_DIR="$HOME/.nvm"
-  . "/usr/local/opt/nvm/nvm.sh"
+echo '[debug] alisaes done'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# use the right version of node
-nvm use 10
+# Run this asynchronously because it takes forever for some reason
+source ~/.zsh-nvm/zsh-nvm.plugin.zsh &
+echo '[debug] nvm done'
 
 autoload -U +X compinit && compinit
+echo '[debug] autocomplete 1/2'
 autoload -U +X bashcompinit && bashcompinit
-eval "$(stack --bash-completion-script stack)"
+echo '[debug] autocomplete 2/2'
 export GPG_TTY=$(tty)
-export PATH=~/bin:/home/peter/.cargo/bin:/home/peter/.nvm/versions/node/v10.9.0/bin:/usr/share/Modules/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/peter/.local/bin:/home/peter/bin:/home/peter/bin:/usr/local/bin:/home/peter/.cargo/bin
+export PATH=~/bin:~/.cargo/bin:/home/peter/.nvm/versions/node/v10.9.0/bin:/usr/share/Modules/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/peter/.local/bin:/home/peter/bin:/home/peter/bin:/usr/local/bin:/Users/petereast/.cargo/bin
 
 # Add some i3lock stuff
 alias lock='i3lock -c000000 -i /home/peter/Pictures/t3_77zygv.png'
 alias syssleep='lock && systemctl suspend'
 
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+echo '[debug] autocomplete done'
 
 # Add stuff that should be in the path anyway
 PATH=$PATH:/bin
@@ -111,13 +101,25 @@ if [ $commands[kubectl] ]; then
   source <(kubectl completion zsh)
 fi
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:/Users/petereast/Library/Python/3.7/bin:/usr/local/go/bin:$PATH"
 
-# Zeit stuff
-alias zremote="TERM=screen ssh -t root@167.99.82.200 -L 3000:localhost:3000 -L 8080:localhost:8080 tmux attach"
-alias zlog="git log --reverse --format=%B --max-count=20 | sed '/^$/d' | sed 's/^/* /'"
-
-export PATH="$HOME/.rbenv/bin:$PATH"
-
-eval "$(rbenv init -)"
 alias prdone='git checkout master && git pull --prune'
+alias prdev='git checkout dev && git pull --prune'
+# The following lines were added by compinstall
+zstyle :compinstall filename '/Users/petereast/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+#
+source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+export JAVA_HOME=$(/usr/libexec/java_home)
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/petereast/.sdkman"
+[[ -s "/Users/petereast/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/petereast/.sdkman/bin/sdkman-init.sh"
+export PATH="$PATH:/Users/petereast/Library/Application Support/Coursier/bin"
+
+# Github CLI - make draft PRs
+alias pr='gh pr create --draft'
