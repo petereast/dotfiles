@@ -1,5 +1,10 @@
 {
   "languageserver": {
+    "terraform": {
+    "command": "terraform-lsp",
+    "filetypes": ["terraform", "tf"],
+    "initializationOptions": {}
+  },
     "elmLS": {
       "command": "elm-language-server",
       "filetypes": ["elm"],
