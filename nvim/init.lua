@@ -25,7 +25,9 @@ require("lazy").setup({
  'peitalin/vim-jsx-typescript',
 -- 'fatih/vim-go',
  'hashivim/vim-terraform',
- 'folke/zen-mode.nvim',
+ {'folke/zen-mode.nvim',
+  opts = { window = { width = 180 } }
+ },
  'williamboman/mason.nvim',
  'williamboman/mason-lspconfig.nvim',
  'neovim/nvim-lspconfig',
@@ -116,7 +118,11 @@ require('go').setup{
 }
 local cfg = require'go.lsp'.config() -- config() return the go.nvim gopls setup
 
-require('lspconfig').gopls.setup(cfg)
+-- configure language servers
+local lspconfig = require('lspconfig')
+lspconfig.gopls.setup(cfg)
+lspconfig.tsserver.setup({})
+lspconfig.pyright.setup({})
 
 --Set completeopt to have a better completion experience
 -- :help completeopt
@@ -144,7 +150,7 @@ rt.setup({
   server = {
     on_attach = function(_, bufnr)
       -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      vim.keymap.set("n", "<C-k>", rt.hover_actions.hover_actions, { buffer = bufnr })
       -- Code action groups
       vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
     end,
@@ -202,6 +208,14 @@ cmp.setup({
           return item
       end,
   },
+})
+
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = function ()
+    vim.api.nvim_set_hl(0, '@lsp.type.variable', { bold=false })
+    vim.api.nvim_set_hl(0, "LspInlayHint", { bold=false })
+  end
 })
 
 vim.o.background = "dark" -- or "light" for light mode
