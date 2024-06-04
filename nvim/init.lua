@@ -92,7 +92,8 @@ vim.cmd([[
 
   set clipboard^=unnamed
   set hidden
-  command! Gc Git add % | Git commit
+  command! -nargs=1 Gc Git add % | Git commit -m <f-args>
+  command! Config tabe ~/.config/nvim/init.lua
   set timeoutlen=100 ttimeoutlen=0
 
   hi Pmenu ctermbg=white
